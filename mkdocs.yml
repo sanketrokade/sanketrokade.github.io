@@ -1,0 +1,8 @@
+site_name: Supercomputing & Accelerated Computing
+
+nav:
+  - Home: index.md
+  - Supercomputing For Everyone:
+      - Overview: supercomputing/index.md
+  - Accelerated Computing:
+      - Overview: accelerated-computing/index.md
