@@ -1,256 +1,363 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
   <meta charset="UTF-8">
+  <meta name="title" content="Why Performance Stopped Scaling with Faster CPUs">
+  <meta name="series" content="Accelerated Computing — From First Principles">
+  <meta name="order" content="1">
   <title>Why Performance Stopped Scaling with Faster CPUs</title>
 </head>
 <body>
 
-<h1>Why Performance Stopped Scaling with Faster CPUs</h1>
+  <h1>Why Performance Stopped Scaling with Faster CPUs</h1>
 
-<p><em>Accelerated Computing — From First Principles (Part 1)</em></p>
+  <p><em>Accelerated Computing — From First Principles (Part 1)</em></p>
 
----
-title: "Why Performance Stopped Scaling with Faster CPUs"
-series: "Accelerated Computing — From First Principles"
-order: 1
----
+  <p>
+    For a long time, using a computer felt almost magical.
+  </p>
 
-# Why Performance Stopped Scaling with Faster CPUs
+  <p>
+    You bought a new machine, installed the same software, and everything just ran faster.
+    No code changes. No optimizations. No effort.
+  </p>
 
-For a long time, using a computer felt almost magical.
+  <p>
+    This pattern held for decades — so consistently that many people assumed it would last forever.
+  </p>
 
-You bought a new machine, installed the same software, and everything just ran faster.
-No code changes. No optimizations. No effort.
+  <p>
+    But eventually, the free performance stopped coming.
+  </p>
 
-This pattern held for decades — so consistently that many people assumed it would last forever.
+  <p>
+    Modern CPUs are astonishing feats of engineering, containing billions of transistors and layers of sophisticated logic.
+    Yet the speed of everyday programs no longer improves the way it once did.
+  </p>
 
-But eventually, the free performance stopped coming.
+  <p>
+    This didn’t happen because engineers ran out of ideas.
+    It happened because we ran into fundamental limits.
+  </p>
 
-Modern CPUs are astonishing feats of engineering, containing billions of transistors and layers of sophisticated logic. Yet the speed of everyday programs no longer improves the way it once did.
+  <p>
+    To understand accelerated computing, GPUs, and modern hardware design, we must first understand why faster CPUs stopped being the answer.
+  </p>
 
-This didn’t happen because engineers ran out of ideas.
-It happened because we ran into fundamental limits.
+  <hr>
 
-To understand accelerated computing, GPUs, and modern hardware design, we must first understand why faster CPUs stopped being the answer.
+  <h2>1. The Era of “Free” Performance</h2>
 
----
+  <p>
+    From roughly the early 1990s to the mid-2000s, performance gains came almost automatically.
+  </p>
 
-## 1. The Era of “Free” Performance
+  <p>Every new processor generation delivered:</p>
 
-From roughly the early 1990s to the mid-2000s, performance gains came almost automatically.
+  <ul>
+    <li>Higher clock speeds</li>
+    <li>Deeper and smarter execution pipelines</li>
+    <li>Increasingly clever hardware optimizations</li>
+  </ul>
 
-Every new processor generation delivered:
+  <p>
+    Software developers benefited without doing anything special.
+    If your program took 10 seconds this year, it might take 7 seconds next year — simply because the CPU was faster.
+  </p>
 
-- Higher clock speeds
-- Deeper and smarter execution pipelines
-- Increasingly clever hardware optimizations
+  <p>This led to an implicit assumption:</p>
 
-Software developers benefited without doing anything special. If your program took 10 seconds this year, it might take 7 seconds next year — simply because the CPU was faster.
+  <blockquote>
+    <strong>Performance improvements are the hardware’s responsibility.</strong>
+  </blockquote>
 
-This led to an implicit assumption:
+  <p>
+    That assumption held for a long time — until it broke.
+  </p>
 
-> **Performance improvements are the hardware’s responsibility.**
+  <p>
+    What made this era possible was <strong>Dennard scaling</strong>: as transistors shrank, they became faster
+    <em>and</em> more power-efficient.
+    Combined with <strong>Moore’s Law</strong>, which kept transistor counts doubling,
+    CPUs could increase clock speeds without exploding power consumption.
+  </p>
 
-That assumption held for a long time — until it broke.
+  <p>
+    But neither law would hold forever.
+  </p>
 
-What made this era possible was **Dennard scaling**: as transistors shrank, they became faster *and* more power-efficient. Combined with **Moore’s Law**, which kept transistor counts doubling, CPUs could increase clock speeds without exploding power consumption.
+  <hr>
 
-But neither law would hold forever.
+  <h2>2. What Does “Faster CPU” Actually Mean?</h2>
 
----
+  <p>
+    At a high level, a CPU executes instructions in a sequence:
+  </p>
 
-## 2. What Does “Faster CPU” Actually Mean?
+  <ol>
+    <li>Load data</li>
+    <li>Perform an operation</li>
+    <li>Store the result</li>
+  </ol>
 
-At a high level, a CPU executes instructions in a sequence:
+  <p>
+    One of the most direct ways to make this faster is to increase the clock frequency —
+    measured in megahertz (MHz) and later gigahertz (GHz).
+  </p>
 
-1. Load data
-2. Perform an operation
-3. Store the result
+  <p>A higher clock frequency means:</p>
 
-One of the most direct ways to make this faster is to increase the clock frequency — measured in megahertz (MHz) and later gigahertz (GHz).
+  <ul>
+    <li>More instruction steps per second</li>
+    <li>Less time per individual operation</li>
+  </ul>
 
-A higher clock frequency means:
+  <p>
+    For many years, performance improvements were largely driven by steadily increasing clock speeds.
+  </p>
 
-- More instruction steps per second
-- Less time per individual operation
+  <p>
+    So why didn’t we just keep increasing them?
+  </p>
 
-For many years, performance improvements were largely driven by steadily increasing clock speeds.
+  <hr>
 
-So why didn’t we just keep increasing them?
+  <h2>3. The Clock Frequency Wall</h2>
 
----
+  <p>
+    Increasing clock frequency is not free.
+  </p>
 
-## 3. The Clock Frequency Wall
+  <p>As frequency rises:</p>
 
-Increasing clock frequency is not free.
+  <ul>
+    <li>Power consumption increases sharply</li>
+    <li>Heat generation rises with it</li>
+    <li>Signal timing becomes harder to control</li>
+  </ul>
 
-As frequency rises:
+  <p>
+    Eventually, CPUs began to consume too much power and generate too much heat to remain practical.
+    Cooling solutions became complex, expensive, and inefficient.
+  </p>
 
-- Power consumption increases sharply
-- Heat generation rises with it
-- Signal timing becomes harder to control
+  <p>
+    This barrier is often called the <strong>power wall</strong>.
+  </p>
 
-Eventually, CPUs began to consume too much power and generate too much heat to remain practical. Cooling solutions became complex, expensive, and inefficient.
+  <p>
+    Engineers did not forget how to raise frequencies — they simply could not do so without creating chips that:
+  </p>
 
-This barrier is often called the **power wall**.
+  <ul>
+    <li>Overheated quickly</li>
+    <li>Drew enormous amounts of power</li>
+    <li>Became unreliable at scale</li>
+  </ul>
 
-Engineers did not forget how to raise frequencies — they simply could not do so without creating chips that:
+  <p>
+    Physics imposed a hard constraint.
+  </p>
 
-- Overheated quickly
-- Drew enormous amounts of power
-- Became unreliable at scale
+  <p>
+    Clock speeds stopped scaling exponentially, even though transistor counts continued to rise.
+  </p>
 
-Physics imposed a hard constraint.
+  <hr>
 
-Clock speeds stopped scaling exponentially, even though transistor counts continued to rise.
+  <h2>4. Getting More Work from Each Clock Cycle</h2>
 
----
+  <p>
+    When frequency scaling slowed, CPU designers turned to another strategy:
+    <strong>do more work per clock cycle</strong>.
+  </p>
 
-## 4. Getting More Work from Each Clock Cycle
+  <p>This led to techniques such as:</p>
 
-When frequency scaling slowed, CPU designers turned to another strategy: **do more work per clock cycle**.
+  <ul>
+    <li>Executing multiple instructions at once</li>
+    <li>Reordering instructions internally</li>
+    <li>Predicting which branches and data will be needed next</li>
+  </ul>
 
-This led to techniques such as:
+  <p>
+    Together, these techniques are known as <strong>Instruction-Level Parallelism (ILP)</strong>.
+  </p>
 
-- Executing multiple instructions at once
-- Reordering instructions internally
-- Predicting which branches and data will be needed next
+  <p>
+    From the programmer’s perspective, the code still looked sequential.
+    Internally, however, the CPU was aggressively rearranging and speculating
+    to keep its execution units busy.
+  </p>
 
-Together, these techniques are known as **Instruction-Level Parallelism (ILP)**.
+  <p>
+    For a while, this worked.
+  </p>
 
-From the programmer’s perspective, the code still looked sequential. Internally, however, the CPU was aggressively rearranging and speculating to keep its execution units busy.
+  <hr>
 
-For a while, this worked.
+  <h2>5. The Limits of Instruction-Level Parallelism</h2>
 
----
+  <p>
+    Real programs are not infinitely parallel.
+  </p>
 
-## 5. The Limits of Instruction-Level Parallelism
+  <p>They contain:</p>
 
-Real programs are not infinitely parallel.
+  <ul>
+    <li>Data dependencies</li>
+    <li>Branches and control flow</li>
+    <li>Memory accesses with unpredictable latency</li>
+  </ul>
 
-They contain:
+  <p>
+    As CPUs grew more complex, extracting ever-smaller amounts of parallelism required
+    more transistors, more power, and more design complexity.
+  </p>
 
-- Data dependencies (one result needed before the next step)
-- Branches and control flow
-- Memory accesses with unpredictable latency
+  <p>
+    Each additional percent of performance came at a disproportionately higher cost.
+    Linear gains turned into exponential expense.
+  </p>
 
-As CPUs grew more complex, extracting ever-smaller amounts of parallelism required:
+  <p>
+    Eventually, the return on investment collapsed.
+  </p>
 
-- More transistors
-- More power
-- More design complexity
+  <hr>
 
-Each additional percent of performance came at a disproportionately higher cost. Linear gains turned into exponential expense.
+  <h2>6. The Memory Wall</h2>
 
-Eventually, the return on investment collapsed.
+  <p>
+    Even when a CPU has instructions ready to execute, it often spends its time waiting —
+    not on computation, but on <strong>data</strong>.
+  </p>
 
----
+  <p>
+    Processor speeds increased far faster than memory latency and bandwidth.
+    Fetching data from main memory can take hundreds of clock cycles,
+    leaving execution units idle despite gigahertz clock speeds.
+  </p>
 
-## 6. The Memory Wall
+  <p>
+    This gap is known as the <strong>memory wall</strong>.
+  </p>
 
-Even when a CPU has instructions ready to execute, it often spends its time waiting — not on computation, but on **data**.
+  <p>
+    Much of modern CPU complexity exists not to perform more arithmetic,
+    but to <em>hide memory latency</em>.
+    When that hiding fails, performance stalls.
+  </p>
 
-Processor speeds increased far faster than memory latency and bandwidth. Fetching data from main memory can take hundreds of clock cycles, leaving execution units idle despite gigahertz clock speeds.
+  <hr>
 
-This gap is known as the **memory wall**.
+  <h2>7. The Multi-Core Shift — and Its Reality</h2>
 
-Much of modern CPU complexity — deep caches, speculation, out-of-order execution — exists not to perform more arithmetic, but to *hide memory latency*. When that hiding fails, performance stalls.
+  <p>
+    When single-core performance stopped scaling, the industry changed direction.
+  </p>
 
-At this point, adding more cleverness yielded diminishing returns.
+  <p>Instead of building one extremely fast core, CPUs began shipping with:</p>
 
----
+  <ul>
+    <li>2, 4, 8, or more cores</li>
+  </ul>
 
-## 7. The Multi-Core Shift — and Its Reality
+  <p>
+    In theory, this should have solved the problem.
+  </p>
 
-When single-core performance stopped scaling, the industry changed direction.
+  <p>In practice, it exposed another hard truth:</p>
 
-Instead of building one extremely fast core, CPUs began shipping with:
+  <blockquote>
+    <strong>Not all programs can be parallelized.</strong>
+  </blockquote>
 
-- 2, 4, 8, or more cores
+  <p>
+    Some parts of a program must run sequentially.
+    No matter how many cores you add, those sections do not get faster.
+  </p>
 
-In theory, this should have solved the problem.
+  <p>
+    This idea is captured by <strong>Amdahl’s Law</strong>.
+  </p>
 
-In practice, it exposed another hard truth:
+  <hr>
 
-> **Not all programs can be parallelized.**
+  <h2>8. Dark Silicon and Wasted Potential</h2>
 
-Some parts of a program must run sequentially. No matter how many cores you add, those sections do not get faster.
+  <p>
+    Modern CPUs contain billions of transistors, but:
+  </p>
 
-This idea is captured by **Amdahl’s Law**, which states that the serial portion of a program limits its maximum speedup.
+  <ul>
+    <li>Not all parts of the chip can be active at once</li>
+    <li>Power and thermal limits force large regions to remain idle</li>
+  </ul>
 
-Multi-core processors help — but only if software is explicitly designed to use them.
+  <p>
+    This phenomenon is often called <strong>dark silicon</strong>.
+  </p>
 
----
+  <p>
+    The result is unavoidable inefficiency.
+  </p>
 
-## 8. Dark Silicon and Wasted Potential
+  <hr>
 
-Modern CPUs contain billions of transistors, but:
+  <h2>9. The Uncomfortable Truth About CPUs</h2>
 
-- Not all parts of the chip can be active at once
-- Power and thermal limits force large regions to remain idle
+  <p>
+    General-purpose CPUs are engineering masterpieces,
+    but that flexibility comes at a cost.
+  </p>
 
-This phenomenon is often called **dark silicon**.
+  <p>For many modern workloads, CPUs:</p>
 
-It does not mean CPUs are poorly designed. General-purpose processors must support a wide range of features, even if most applications use only a small subset of them.
+  <ul>
+    <li>Spend enormous energy managing complexity</li>
+    <li>Waste power on generality</li>
+    <li>Struggle to scale performance efficiently</li>
+  </ul>
 
-The result is unavoidable inefficiency.
+  <hr>
 
----
+  <h2>10. The Only Viable Path Forward</h2>
 
-## 9. The Uncomfortable Truth About CPUs
+  <p>
+    Once frequency scaling stalled and general-purpose optimization hit hard limits,
+    the choice became unavoidable.
+  </p>
 
-General-purpose CPUs are engineering masterpieces.
+  <ul>
+    <li>Accept diminishing returns</li>
+    <li>Or trade generality for efficiency</li>
+  </ul>
 
-They are flexible, programmable, and capable of running almost any kind of software. But that flexibility comes at a cost.
+  <p>
+    This realization made specialized accelerators inevitable.
+  </p>
 
-For many modern workloads, CPUs:
+  <hr>
 
-- Spend enormous energy managing complexity
-- Waste power on generality
-- Struggle to scale performance efficiently
+  <h2>What Comes Next</h2>
 
-CPUs did not stop improving. They continued optimizing for low-latency, single-thread performance — even as the dominant workloads shifted toward throughput, parallelism, and efficiency.
+  <p>
+    If CPUs cannot efficiently scale performance alone, the next question is obvious:
+  </p>
 
-This mismatch made alternatives inevitable.
+  <p>
+    Where does the real cost of computation lie?
+  </p>
 
----
+  <p>
+    That is where we go next.
+  </p>
 
-## 10. The Only Viable Path Forward
-
-Once frequency scaling stalled and general-purpose optimization hit hard limits, the choice became unavoidable:
-
-- Accept diminishing returns
-- Or trade generality for efficiency
-
-The path forward required:
-
-- Explicit parallelism
-- Specialized hardware
-- Designs optimized for throughput and energy efficiency
-
-This realization did not immediately produce GPUs and accelerators — but it made them inevitable.
-
-Understanding this shift is the foundation for everything that follows in accelerated computing.
-
----
-
-## What Comes Next
-
-If CPUs cannot efficiently scale performance alone, the next question is obvious:
-
-Where does the real cost of computation lie?
-
-Is it arithmetic?
-Or is it something else entirely?
-
-That is where we go next.
-
----
-
-### Next Article
-**The Real Cost of Computation: Data Movement vs Arithmetic**
-
+  <h3>Next Article</h3>
+  <p>
+    <strong>The Real Cost of Computation: Data Movement vs Arithmetic</strong>
+  </p>
 
 </body>
 </html>
