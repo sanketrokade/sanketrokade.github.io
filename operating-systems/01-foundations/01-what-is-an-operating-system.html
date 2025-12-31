@@ -1,272 +1,169 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width,initial-scale=1.0">
-  <title>What Is an Operating System? — From First Principles</title>
-  <link rel="stylesheet" href="/assets/style.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>What Is an Operating System?</title>
+<link rel="stylesheet" href="/assets/style.css">
 </head>
 <body>
-
-<header>
-  <nav>
-    <a href="/index.html">Home</a> |
-    <a href="/operating-systems/index.html">OS Series</a>
-  </nav>
-</header>
-
-<main>
 
 <h1>What Is an Operating System?</h1>
 <p><em>A conversation between you and the machine.</em></p>
 
-<hr>
+<h2>Let’s Start With an Uncomfortable Question</h2>
 
-<section>
-  <h2>Let’s Start With an Uncomfortable Question</h2>
+<p>You press the power button.</p>
 
-  <p>
-    You press the power button.
-    <br><br>
-    The screen lights up.
-    <br>
-    The cursor blinks.
-    <br>
-    Programs run.
-  </p>
+<p>The screen lights up.<br>
+The cursor blinks.<br>
+Programs run.</p>
 
-  <p>
-    But here’s the uncomfortable part:
-  </p>
+<p>But here’s the uncomfortable part:</p>
 
-  <blockquote>
-    The hardware itself has <strong>no idea</strong> what a program is.
-  </blockquote>
+<ul>
+<li>The hardware has no inherent concept of a program.</li>
+<li>No concept of a file.</li>
+<li>No concept of a process.</li>
+<li>No built-in understanding of “run this next.”</li>
+</ul>
 
-  <p>
-    No idea what a file is.
-    <br>
-    No idea what a process is.
-    <br>
-    No idea what “run this next” means.
-  </p>
-</section>
+<p>At the lowest level, hardware understands only electrical signals interpreted as machine instructions.</p>
 
-<hr>
+<h2>If There Were No Operating System</h2>
 
-<section>
-  <h2>If There Were No Operating System</h2>
+<p>Imagine a computer with no operating system.</p>
 
-  <p>
-    Imagine a computer without an operating system.
-  </p>
+<p>The CPU can do only one fundamental thing:</p>
 
-  <p>
-    The CPU can only do one thing:
-    <br>
-    <strong>execute the next instruction at a memory address.</strong>
-  </p>
+<blockquote>
+Fetch an instruction from a memory address, decode it, and execute it.
+</blockquote>
 
-  <p>
-    That’s it.
-  </p>
+<p>That is the entire model.</p>
 
-  <p>
-    No windows.
-    <br>
-    No files.
-    <br>
-    No multitasking.
-    <br>
-    No users.
-  </p>
+<ul>
+<li>No windows</li>
+<li>No files</li>
+<li>No multitasking</li>
+<li>No users</li>
+</ul>
 
-  <p>
-    Just raw electricity following microscopic pathways.
-  </p>
-</section>
+<p>Just transistors switching states according to physical laws.</p>
 
-<hr>
+<h2>So Who Teaches the Machine How to Behave?</h2>
 
-<section>
-  <h2>So Who Teaches the Machine How to Behave?</h2>
+<p>That role is played by the Operating System.</p>
 
-  <p>
-    That role is played by the <strong>Operating System</strong>.
-  </p>
+<p>Not merely as an application,<br>
+not as something you “open,”<br>
+but as the foundational software layer that controls the machine.</p>
 
-  <p>
-    Not as a “program”.
-    <br>
-    Not as an “app”.
-  </p>
+<p>The core of an operating system — the <strong>kernel</strong> — is the first software component that takes control of the CPU after boot.</p>
 
-  <blockquote>
-    The Operating System is the <strong>first long-living idea</strong> that runs on your machine.
-  </blockquote>
+<p>It remains resident in memory for the entire lifetime of the system and executes in a privileged mode unavailable to ordinary programs.</p>
 
-  <p>
-    It wakes up before everything else.
-    <br>
-    It never really sleeps.
-    <br>
-    And everything else must ask its permission.
-  </p>
-</section>
+<h2>The OS Is Not a Single Thing — It Is a Set of Responsibilities</h2>
 
-<hr>
+<p>People often ask:</p>
 
-<section>
-  <h2>The OS Is Not a Thing — It Is a Set of Decisions</h2>
+<blockquote>
+“What is an operating system made of?”
+</blockquote>
 
-  <p>
-    Most people ask:
-  </p>
+<p>A more useful question is:</p>
 
-  <blockquote>
-    “What is an Operating System made of?”
-  </blockquote>
+<blockquote>
+“What decisions must be made for a computer to be usable and safe?”
+</blockquote>
 
-  <p>
-    That’s the wrong question.
-  </p>
+<p>These decisions include:</p>
 
-  <p>
-    The better question is:
-  </p>
+<ul>
+<li>Which process gets the CPU next (scheduling)</li>
+<li>Where each process’s memory begins and ends (memory management)</li>
+<li>How shared devices are accessed safely (I/O coordination)</li>
+<li>What happens when a program crashes or misbehaves (protection and isolation)</li>
+</ul>
 
-  <blockquote>
-    “What decisions must be made for a computer to feel usable?”
-  </blockquote>
+<p>The operating system exists to make these decisions continuously, efficiently, and securely.</p>
 
-  <ul>
-    <li>Who gets the CPU next?</li>
-    <li>Where does this program’s memory begin and end?</li>
-    <li>What happens if two programs want the same device?</li>
-    <li>What happens if a program misbehaves?</li>
-  </ul>
+<h2>A Useful Mental Model: The OS as an Abstraction Layer</h2>
 
-  <p>
-    The Operating System exists to make these decisions
-    <br>
-    <strong>continuously, fairly, and safely.</strong>
-  </p>
-</section>
+<p>Humans think in terms of:</p>
 
-<hr>
+<ul>
+<li>Files</li>
+<li>Programs</li>
+<li>Windows</li>
+<li>User actions</li>
+</ul>
 
-<section>
-  <h2>A Mental Model: The OS as a Translator</h2>
+<p>Hardware understands only:</p>
 
-  <p>
-    Humans speak in:
-  </p>
+<ul>
+<li>Registers</li>
+<li>Memory addresses</li>
+<li>Interrupts</li>
+<li>Clock signals</li>
+</ul>
 
-  <ul>
-    <li>Files</li>
-    <li>Programs</li>
-    <li>Windows</li>
-    <li>Clicks</li>
-  </ul>
+<p>The operating system provides <strong>abstractions</strong> that translate human intent into controlled hardware activity.</p>
 
-  <p>
-    Hardware understands only:
-  </p>
+<p>Files become structured blocks on storage.<br>
+Processes become scheduled execution contexts.<br>
+Clicks become interrupts and system calls.</p>
 
-  <ul>
-    <li>Registers</li>
-    <li>Memory addresses</li>
-    <li>Interrupt signals</li>
-    <li>Clock ticks</li>
-  </ul>
+<h2>How the OS Actually Starts</h2>
 
-  <blockquote>
-    The Operating System lives in between,
-    translating intent into electrical action.
-  </blockquote>
-</section>
+<p>When a system boots:</p>
 
-<hr>
+<ol>
+<li>Firmware (such as BIOS or UEFI) begins execution</li>
+<li>A bootloader loads the operating system kernel into memory</li>
+<li>The kernel initializes hardware, memory, and scheduling</li>
+<li>User-space programs are launched under kernel supervision</li>
+</ol>
 
-<section>
-  <h2>How the OS Actually Lives on Your Machine</h2>
+<p>From this point forward:</p>
 
-  <p>
-    When the system boots:
-  </p>
+<p>Ordinary programs do not access hardware directly.<br>
+They request services via system calls.<br>
+The kernel enforces boundaries and permissions.</p>
 
-  <ol>
-    <li>Firmware starts execution</li>
-    <li>A bootloader loads the kernel</li>
-    <li>The kernel takes control of the CPU</li>
-    <li>Everything else becomes a guest</li>
-  </ol>
+<h2>Historical Note</h2>
 
-  <p>
-    From that moment:
-  </p>
+<p>Early computers had no operating systems.</p>
 
-  <blockquote>
-    No program touches hardware directly.
-    <br>
-    Everything goes through the OS.
-  </blockquote>
-</section>
+<p>Programs were loaded manually using switches or punched cards. Only one program could run at a time, and a crash often required restarting the entire machine.</p>
 
-<hr>
+<p>The operating system emerged as complexity demanded coordination, safety, and efficiency.</p>
 
-<section>
-  <h2>Did You Know?</h2>
+<h2>What You Should Understand Now</h2>
 
-  <blockquote>
-    🔍 Early computers had no operating systems.
-    Programs were loaded manually using switches,
-    and only one program could exist at a time.
-    If it crashed — the machine was restarted.
-  </blockquote>
-</section>
+<ul>
+<li>An operating system is not just “Windows” or “Linux”</li>
+<li>Hardware alone cannot manage modern computational complexity</li>
+<li>The OS provides abstractions, protection, and resource management</li>
+<li>It acts as the guardian between software and hardware</li>
+</ul>
 
-<hr>
+<h2>What Comes Next</h2>
 
-<section>
-  <h2>What You Should Understand Now</h2>
+<p>If the operating system exists to make decisions…</p>
 
-  <ul>
-    <li>An OS is not just “Windows or Linux”</li>
-    <li>Hardware alone cannot manage complexity</li>
-    <li>The OS exists to make continuous decisions</li>
-    <li>The OS is the guardian between software and hardware</li>
-  </ul>
-</section>
+<p><strong>Why was it needed in the first place?</strong></p>
 
-<hr>
+<p>In the next article, we explore:</p>
 
-<section>
-  <h2>What Comes Next</h2>
+<blockquote>
+“Why Do We Need an Operating System at All?”
+</blockquote>
 
-  <p>
-    If the OS is a decision-maker…
-    <br>
-    <strong>why was it needed in the first place?</strong>
-  </p>
-
-  <p>
-    In the next article, we’ll explore:
-  </p>
-
-  <blockquote>
-    “Why Do We Need an Operating System at All?”
-  </blockquote>
-
-  <p>
-    <a href="02-why-os.html">Continue →</a>
-  </p>
-</section>
-
-</main>
+<p><em>Continue →</em></p>
 
 <footer>
-  <p>&copy; 2025 Sanket</p>
+© 2025 Sanket
 </footer>
 
 </body>
