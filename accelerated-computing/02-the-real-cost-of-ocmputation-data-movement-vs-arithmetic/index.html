@@ -1,0 +1,291 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="title" content="The Real Cost of Computation: Data Movement vs Arithmetic">
+  <meta name="series" content="Accelerated Computing — From First Principles">
+  <meta name="order" content="2">
+  <title>The Real Cost of Computation: Data Movement vs Arithmetic</title>
+  <link rel="stylesheet" href="/assets/style.css">
+</head>
+<body>
+
+  <h1>The Real Cost of Computation: Data Movement vs Arithmetic</h1>
+
+  <p><em>Accelerated Computing — From First Principles (Part 2)</em></p>
+  <hr>
+  <p>
+    In the previous article, we saw why simply making CPUs faster stopped working. 
+    Clock speeds hit physical limits, complexity exploded, and performance gains slowed to a crawl.
+  </p>
+
+  <p>
+    But that still leaves an uncomfortable question unanswered.
+  </p>
+
+  <p>
+    Modern processors can execute billions of arithmetic operations per second. Multiplications, additions, fused operations — all of them are astonishingly fast. If arithmetic is so cheap, why do real programs still feel slow?
+  </p>
+
+  <p>
+    The answer is unintuitive at first, but once you see it, you cannot unsee it:
+  </p>
+
+  <blockquote>
+    <strong>Most programs are not limited by computation. They are limited by data movement.</strong>
+  </blockquote>
+
+  <p>
+    Understanding this single idea is essential to understanding accelerated computing.
+  </p>
+
+  <hr>
+
+  <h2>1. What Do We Mean by “Computation”?</h2>
+
+  <p>
+    When people talk about computation, they usually imagine math:
+  </p>
+
+  <ul>
+    <li>Adding numbers</li>
+    <li>Multiplying matrices</li>
+    <li>Evaluating equations</li>
+  </ul>
+
+  <p>
+    But from the hardware’s point of view, a program is made of three very different kinds of work:
+  </p>
+
+  <ul>
+    <li><strong>Arithmetic operations</strong> — Add, multiply, compare, shift.</li>
+    <li><strong>Data movement</strong> — Load data from memory, store results, move values between different parts of the system.</li>
+    <li><strong>Control and bookkeeping</strong> — Branching, checking conditions, managing instruction flow.</li>
+  </ul>
+
+  <p>
+    Only the first category is “math”. And it turns out to be the cheapest part.
+  </p>
+
+  <hr>
+
+  <h2>2. A Computer Is Not One Place — It Is a Distance Problem</h2>
+
+  <p>
+    A useful way to think about a computer is not as a single machine, but as a hierarchy of locations.
+    Data can live in:
+  </p>
+
+  <ul>
+    <li>CPU registers (right next to the execution units)</li>
+    <li>Small, fast caches</li>
+    <li>Larger, slower caches</li>
+    <li>Main memory (RAM)</li>
+    <li>Storage (SSD, disk)</li>
+  </ul>
+
+  <p>
+    The farther the data is from where computation happens:
+  </p>
+
+  <ul>
+    <li>The longer it takes to access</li>
+    <li>The more energy it costs to move</li>
+  </ul>
+
+  <p>
+    This distance is not metaphorical. It is physical. Signals have to travel through wires, across chip boundaries, through memory controllers. Physics does not care how clever our software is.
+  </p>
+
+  <hr>
+
+  <h2>3. A Simple Thought Experiment</h2>
+
+  <p>
+    Consider two situations.
+  </p>
+
+  <h3>Case A</h3>
+  <p>
+    You want to add two numbers that are already in CPU registers. The processor:
+  </p>
+  <ul>
+    <li>Fetches the instruction</li>
+    <li>Performs the addition</li>
+    <li>Produces the result</li>
+  </ul>
+  <p>This takes only a few clock cycles.</p>
+
+  <h3>Case B</h3>
+  <p>
+    You want to add two numbers that live in main memory. Now the processor must:
+  </p>
+  <ul>
+    <li>Request the data from memory</li>
+    <li>Wait while it travels across the memory bus</li>
+    <li>Load it into caches</li>
+    <li>Move it into registers</li>
+    <li>Finally perform the same addition</li>
+  </ul>
+  <p>
+    The arithmetic operation is identical in both cases. The cost difference comes entirely from moving the data.
+  </p>
+
+  <p>
+    In many real programs, the arithmetic is fast enough that it barely matters. What dominates execution time is waiting for data to arrive.
+  </p>
+
+  <hr>
+
+  <h2>4. Why Memory Is So Much Slower Than Computation</h2>
+
+  <p>
+    One might ask: <strong>If arithmetic got so fast, why didn’t memory keep up?</strong>
+  </p>
+
+  <p>
+    Because memory faces a different set of constraints:
+  </p>
+
+  <ul>
+    <li>Memory cells are optimized for density, not speed.</li>
+    <li>Long wires introduce delay and energy loss.</li>
+    <li>Increasing memory bandwidth consumes enormous power.</li>
+    <li>Fast memory is expensive and physically limited.</li>
+  </ul>
+
+  <p>
+    As processors improved, arithmetic speed increased rapidly. Memory speed improved too — but much more slowly.
+  </p>
+
+  <p>
+    This created a widening gap between:
+  </p>
+
+  <ul>
+    <li>How fast we can compute</li>
+    <li>How fast we can feed data to the computation</li>
+  </ul>
+
+  <p>
+    This gap is known as the <strong>memory wall</strong>.
+  </p>
+
+  <hr>
+
+  <h2>5. The Hidden Cost: Energy, Not Just Time</h2>
+
+  <p>
+    Latency is only part of the story.
+  </p>
+
+  <p>
+    Moving data costs energy — often far more than doing arithmetic.
+  </p>
+
+  <p>
+    Flipping a few bits inside a register is cheap. Sending those same bits across a chip, or off the chip to memory, burns orders of magnitude more energy.
+  </p>
+
+  <p>
+    This matters because:
+  </p>
+
+  <ul>
+    <li>Energy turns into heat</li>
+    <li>Heat limits how much hardware can be active</li>
+    <li>Power limits cap overall performance</li>
+  </ul>
+
+  <p>
+    Many performance limits today are not about speed — they are about staying within a power budget.
+  </p>
+
+  <hr>
+
+  <h2>6. Why CPUs Are So Complicated</h2>
+
+  <p>
+    Modern CPUs look incredibly complex:
+  </p>
+
+  <ul>
+    <li>Multiple cache levels</li>
+    <li>Out-of-order execution</li>
+    <li>Speculative loads</li>
+    <li>Branch prediction</li>
+  </ul>
+
+  <p>
+    It is tempting to think all this exists to compute faster.
+  </p>
+
+  <p>
+    In reality, much of it exists to hide memory latency.
+  </p>
+
+  <p>
+    CPUs try to:
+  </p>
+
+  <ul>
+    <li>Guess what data you will need next</li>
+    <li>Fetch it early</li>
+    <li>Keep execution units busy while waiting</li>
+  </ul>
+
+  <p>
+    Sometimes this works beautifully. Sometimes it fails, and the processor stalls — doing almost nothing while waiting for data.
+  </p>
+
+  <p>
+    As workloads grew larger and more data-intensive, hiding memory latency became harder and harder.
+  </p>
+
+  <hr>
+
+  <h2>7. The Key Insight That Changes Everything</h2>
+
+  <p>
+    At this point, a fundamental realization emerges:
+  </p>
+
+  <blockquote>
+    <strong>Performance is dominated by how efficiently data moves, not by how fast arithmetic executes.</strong>
+  </blockquote>
+
+  <p>
+    This has profound consequences.
+  </p>
+
+  <p>
+    If arithmetic is cheap and data movement is expensive, then:
+  </p>
+
+  <ul>
+    <li>Doing more math per byte of data is good</li>
+    <li>Moving less data is even better</li>
+    <li>Architectures that minimize data movement win</li>
+  </ul>
+
+  <p>
+    This is not an optimization trick. It is a first-principles constraint.
+  </p>
+
+  <hr>
+
+  <h2>8. Why This Breaks the CPU-Centric Model</h2>
+
+  <p>
+    General-purpose CPUs are designed for:
+  </p>
+
+  <ul>
+    <li>Low-latency execution</li>
+    <li>Complex control flow</li>
+    <li>Flexibility across many workloads</li>
+  </ul>
+
+  <p>
+    But many modern problems look different:
+  </p
